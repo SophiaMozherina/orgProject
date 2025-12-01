@@ -1,0 +1,149 @@
+<!-- route.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Маршрут — Огненная Камчатка</title>
+  <link rel="stylesheet" href="style/style.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    #map {
+      height: 75vh;
+      width: 100%;
+      border-radius: 12px;
+      margin-top: 1.5rem;
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.12);
+    }
+
+    .map-controls {
+      text-align: center;
+      margin: 1.5rem 0;
+    }
+
+    .btn-map {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 0.6rem 1.4rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      margin: 0 0.6rem;
+      font-size: 1rem;
+      transition: all 0.25s ease;
+    }
+
+    .btn-map:hover {
+      background: transparent;
+      color: var(--accent);
+      border: 2px solid var(--accent);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav>
+      <ul>
+        <li><a href="index.html">Главная</a></li>
+        <li><a href="guide.html">Путеводитель</a></li>
+        <li><a href="route.html">Маршрут</a></li>
+        <li><a href="gallery.html">Галерея</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="container">
+    <h1>Туристический маршрут: «Огненная Камчатка»</h1>
+    <p>Сначала — вся Россия. Затем — десять ключевых точек в самом вулканическом регионе страны.</p>
+
+    <div class="map-controls">
+      <button class="btn-map" id="show-russia">Показать Россию</button>
+      <button class="btn-map" id="show-kamchatka">Показать Камчатку</button>
+    </div>
+
+    <div id="map"></div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // Инициализация карты: общий вид — Россия
+    const map = L.map('map').setView([62, 95], 3);
+
+    // Используем Stadia Alidade Smooth — современная, без API-ключа
+    L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png', {
+      attribution: '© OpenStreetMap contributors, © Stadia Maps'
+    }).addTo(map);
+
+    // Скрыть атрибуцию (только для учебного проекта)
+    map.attributionControl.setPrefix(false);
+
+    const kamchatkaCenter = [59.0, 161.0];
+
+    // Маркер "Камчатский край"
+    const russiaMarker = L.marker([59.0, 161.0], {
+      title: "Камчатский край"
+    }).addTo(map);
+    russiaMarker.bindPopup("<b>Камчатский край</b><br>Нажмите, чтобы увидеть маршрут").openPopup();
+
+    // Точки маршрута
+    const stops = [
+      { name: "Долина Гейзеров", lat: 54.4167, lng: 160.2167, desc: "Один из крупнейших гейзерных полей мира." },
+      { name: "Вулкан Авачинский", lat: 53.25, lng: 158.8333, desc: "Активный стратовулкан, символ Петропавловска-Камчатского." },
+      { name: "Ключевская Сопка", lat: 56.0561, lng: 160.6447, desc: "Самый высокий вулкан Евразии (4750 м)." },
+      { name: "Курятное озеро", lat: 51.4556, lng: 156.9167, desc: "Голубое озеро в кратере потухшего вулкана." },
+      { name: "Термальные источники Паратунки", lat: 52.9167, lng: 158.3333, desc: "Горячие воды среди снежных вершин." },
+      { name: "Мыс Лопатка", lat: 50.7833, lng: 156.6167, desc: "Южная оконечность Камчатки, вид на Курилы." },
+      { name: "Бухта Авача", lat: 52.95, lng: 158.65, desc: "Одна из лучших бухт Тихого океана." },
+      { name: "Ущелье Гейзерное", lat: 54.42, lng: 160.22, desc: "Скрытая жемчужина Долины Гейзеров." },
+      { name: "Вулкан Мутновский", lat: 52.45, lng: 158.1833, desc: "Фумаролы, ледники и серные реки." },
+      { name: "Петропавловск-Камчатский", lat: 53.0167, lng: 158.65, desc: "Столица Камчатки — ворота в край чудес." }
+    ];
+
+    let routeLayer = null;
+    let markers = [];
+
+    function showRussia() {
+      map.setView([62, 95], 3);
+      if (routeLayer) {
+        map.removeLayer(routeLayer);
+        routeLayer = null;
+      }
+      markers.forEach(m => map.removeLayer(m));
+      markers = [];
+      if (!map.hasLayer(russiaMarker)) {
+        russiaMarker.addTo(map);
+      }
+    }
+
+    function showKamchatka() {
+      map.setView(kamchatkaCenter, 6);
+      map.removeLayer(russiaMarker);
+
+      const routeCoords = stops.map(s => [s.lat, s.lng]);
+      routeLayer = L.polyline(routeCoords, {
+        color: '#2ecc71',   // ← изумрудный акцент
+        weight: 4,
+        opacity: 0.9
+      }).addTo(map);
+
+      markers = stops.map(stop => {
+        const marker = L.marker([stop.lat, stop.lng]);
+        marker.bindPopup(`<b>${stop.name}</b><br>${stop.desc}`);
+        marker.addTo(map);
+        return marker;
+      });
+    }
+
+    russiaMarker.on('click', showKamchatka);
+    document.getElementById('show-russia').addEventListener('click', showRussia);
+    document.getElementById('show-kamchatka').addEventListener('click', showKamchatka);
+  </script>
+
+  <footer>
+    <p>© 2025 «Огненная Камчатка» — интерактивный путеводитель</p>
+  </footer>
+
+</body>
+</html>

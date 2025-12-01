@@ -1,0 +1,426 @@
+/* style/style.css */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary: #121212;
+  --secondary: #f8f9fa;
+  --text: #212529;
+  --light-bg: #ffffff;
+  --accent: #2ecc71;
+  --muted: #6c757d;
+  --dark-bg: #0f0f0f;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background-color: var(--secondary);
+  color: var(--text);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* Анимированный фон — абстрактные волны */
+.hero-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: linear-gradient(135deg, var(--dark-bg) 0%, #1a1a1a 100%);
+  overflow: hidden;
+}
+
+.volcano-layer {
+  position: absolute;
+  bottom: -100px;
+  width: 100%;
+  opacity: 0.08;
+  animation: float 18s ease-in-out infinite;
+}
+
+.volcano-layer:nth-child(2) {
+  animation-delay: -6s;
+  opacity: 0.05;
+  transform: scaleX(-1);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  50% { transform: translateY(-25px) rotate(1deg); }
+}
+
+/* Header & Navigation (для index.html и других) */
+header {
+  background: rgba(18, 18, 18, 0.92);
+  padding: 1rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+nav ul {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  gap: 2rem;
+}
+
+nav a {
+  color: var(--secondary);
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.55rem 1.2rem;
+  border-radius: 8px;
+  transition: all 0.25s ease;
+  font-size: 1.02rem;
+}
+
+nav a:hover, nav a:focus {
+  background: rgba(46, 204, 113, 0.15);
+  color: var(--accent);
+}
+
+/* Контент-контейнер (для страниц с центрированным блоком) */
+.container {
+  max-width: 1000px;
+  margin: 3rem auto;
+  padding: 0 1.5rem;
+  background: var(--light-bg);
+  border-radius: 12px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.06);
+  padding: 2.5rem;
+}
+
+h1, h2, h3 {
+  margin-bottom: 1.4rem;
+  color: var(--primary);
+  font-weight: 700;
+}
+
+h1 {
+  font-size: 2.4rem;
+  letter-spacing: -0.5px;
+}
+
+p {
+  margin-bottom: 1.2rem;
+  color: var(--text);
+}
+
+.btn {
+  display: inline-block;
+  background: var(--accent);
+  color: white;
+  padding: 0.7rem 1.8rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  margin-top: 1.2rem;
+  transition: all 0.3s ease;
+  font-size: 1.05rem;
+  border: 2px solid var(--accent);
+}
+
+.btn:hover {
+  background: transparent;
+  color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(46, 204, 113, 0.25);
+}
+
+/* Карта */
+#map {
+  height: 70vh;
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.12);
+  margin-top: 1.5rem;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 2rem;
+  background: var(--primary);
+  color: var(--secondary);
+  margin-top: 4rem;
+  font-size: 0.95rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Главная — дополнения */
+.highlight-fact {
+  background: rgba(46, 204, 113, 0.08);
+  border-left: 4px solid var(--accent);
+  padding: 1.2rem 1.5rem;
+  margin: 2rem 0;
+  border-radius: 0 8px 8px 0;
+  font-size: 1.05rem;
+}
+
+.intro-features h2 {
+  text-align: center;
+  margin: 2.5rem 0 1.8rem;
+  font-size: 1.8rem;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.8rem;
+  margin-bottom: 2rem;
+}
+
+.feature-card {
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+.feature-card h3 {
+  color: var(--primary);
+  margin-bottom: 0.8rem;
+  font-size: 1.25rem;
+}
+
+.cta-buttons {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.cta-buttons .btn.secondary {
+  background: transparent;
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  margin-left: 1rem;
+}
+
+.cta-buttons .btn.secondary:hover {
+  background: var(--accent);
+  color: white;
+}
+
+/* === СТИЛИ ДЛЯ guide.html — ЦЕНТРИРОВАННЫЙ КОНТЕНТ КАК НА ФОТО === */
+
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 220px;
+  background: var(--primary);
+  color: var(--secondary);
+  padding: 1.2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.12);
+  z-index: 100;
+  overflow: hidden;
+}
+
+.sidebar h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1.4rem;
+  color: var(--secondary);
+  letter-spacing: -0.3px;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  flex-grow: 1;
+}
+
+.sidebar nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: inherit;
+}
+
+.sidebar nav ul li a {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  display: block;
+}
+
+.sidebar nav ul li a:hover,
+.sidebar nav ul li a.active {
+  color: var(--accent);
+  background: rgba(46, 204, 113, 0.1);
+}
+
+/* Обёртка под сайдбар — не влияет на центрирование */
+.main-content {
+  margin-left: 220px;
+  padding: 2.5rem 1.5rem;
+  background: var(--secondary);
+}
+
+/* Центрированный блок — как на фото */
+.guide-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  background: var(--light-bg);
+  border-radius: 12px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.06);
+  padding: 2.5rem;
+}
+
+.page-header h2 {
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+  color: var(--primary);
+  text-align: center;
+}
+
+.page-intro {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: var(--muted);
+  max-width: 800px;
+  margin: 0 auto 2.5rem;
+  text-align: center;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.8rem;
+  margin-bottom: 2.5rem;
+  justify-items: center;
+}
+
+.card {
+  background: white;
+  padding: 1.6rem;
+  border-radius: 10px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 350px;
+  transition: transform 0.25s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+.card h3 {
+  color: var(--primary);
+  margin-bottom: 0.8rem;
+  font-size: 1.25rem;
+  text-align: center;
+}
+
+.practical-info {
+  background: rgba(46, 204, 113, 0.06);
+  border-radius: 10px;
+  padding: 1.8rem;
+  margin-bottom: 2.5rem;
+}
+
+.practical-info h3 {
+  margin-bottom: 1rem;
+  color: var(--primary);
+  text-align: center;
+}
+
+.practical-info ul {
+  padding-left: 1.5rem;
+  line-height: 1.8;
+  text-align: left;
+}
+
+.practical-info li {
+  margin-bottom: 0.8rem;
+}
+
+.cta-section {
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.cta-section p {
+  font-size: 1.2rem;
+  margin-bottom: 1.2rem;
+  color: var(--text);
+}
+
+.main-content footer {
+  text-align: center;
+  font-size: 0.95rem;
+  color: var(--muted);
+  padding-top: 1.5rem;
+  border-top: 1px solid #eee;
+  margin-top: 2rem;
+}
+
+/* Адаптив */
+@media (max-width: 768px) {
+  .sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+    padding: 1rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .main-content {
+    margin-left: 0;
+    padding: 1.5rem 1rem;
+  }
+  .guide-container {
+    padding: 1.8rem;
+  }
+
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  nav ul {
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .container {
+    margin: 1.5rem;
+    padding: 1.8rem;
+  }
+
+  h1 {
+    font-size: 1.9rem;
+  }
+
+  .btn {
+    padding: 0.6rem 1.5rem;
+    font-size: 1rem;
+  }
+}
