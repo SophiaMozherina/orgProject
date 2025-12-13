@@ -56,7 +56,7 @@
 
   <div class="container">
     <h1>Туристический маршрут: «Огненная Камчатка»</h1>
-    <p>Сначала — вся Россия. Затем — десять ключевых точек в самом вулканическом регионе страны.</p>
+    
 
     <div class="map-controls">
       <button class="btn-map" id="show-russia">Показать Россию</button>
@@ -72,8 +72,8 @@
     const map = L.map('map').setView([62, 95], 3);
 
     // Используем Stadia Alidade Smooth — современная, без API-ключа
-    L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png', {
-      attribution: '© OpenStreetMap contributors, © Stadia Maps'
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
     // Скрыть атрибуцию (только для учебного проекта)
