@@ -441,12 +441,12 @@
 
   <div id="notification" class="notification">Запрос отправлен!</div>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
   <script>
-    // === EmailJS: вставь свой User ID здесь ===
-    (function() {
-      emailjs.init("KmJkos_4wQ7IMna2J"); // ← ЗАМЕНИ НА СВОЙ!
-    })();
+    // === EmailJS: инициализация после полной загрузки страницы ===
+document.addEventListener('DOMContentLoaded', function() {
+  emailjs.init("KmJkos_4wQ7IMna2J");
+});
 
     // === Данные отелей ===
 const hotels = [
