@@ -4,8 +4,443 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Путеводитель: Дикая Камчатка</title>
+  <title>Южная Камчатка — маршрут</title>
   <link rel="stylesheet" href="style/style.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    .route-intro {
+      margin-bottom: 3rem;
+    }
+
+    .day-card {
+      background: rgba(255, 255, 255, 0.04);
+      border-left: 4px solid var(--accent);
+      padding: 1.2rem;
+      margin-bottom: 1.5rem;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .day-card h3 {
+      margin-top: 0;
+      color: var(--accent);
+    }
+
+    .logistics-section {
+      margin: 3rem 0;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .transport-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .transport-list li {
+      padding: 0.6rem 0;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.15);
+    }
+
+    .transport-list li:last-child {
+      border-bottom: none;
+    }
+
+    .price-tag {
+      font-weight: bold;
+      color: var(--accent);
+    }
+
+    .hotel-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .hotel-card {
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+
+    .hotel-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(46, 204, 113, 0.5);
+    }
+
+    .hotel-card.selected {
+      border-color: var(--accent);
+      background: rgba(46, 204, 113, 0.08);
+    }
+
+    .hotel-img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      background: #2c3e50;
+    }
+
+    .hotel-info {
+      padding: 1rem;
+    }
+
+    .hotel-info h3 {
+      margin: 0 0 0.4rem;
+      color: var(--accent);
+    }
+
+    .hotel-price {
+      font-weight: bold;
+      color: #f1c40f;
+      margin: 0.4rem 0;
+    }
+
+    .calculator-form {
+      display: grid;
+      gap: 1.2rem;
+      max-width: 500px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: white;
+      border: 2px solid #e0e0e0;
+      border-radius: 14px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+      color: #222;
+    }
+
+    .calculator-form h2 {
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+      color: #222;
+      position: relative;
+    }
+
+    .calculator-form h2::after {
+      content: "";
+      display: block;
+      width: 50px;
+      height: 3px;
+      background: #2ecc71;
+      margin: 0.6rem auto 0;
+      border-radius: 2px;
+    }
+
+    .form-row label {
+      margin-bottom: 0.4rem;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .form-row input,
+    .form-row select {
+      padding: 0.7rem;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      background: white;
+      color: #222;
+      font-size: 1rem;
+      transition: border-color 0.25s;
+    }
+
+    .form-row input:focus,
+    .form-row select:focus {
+      outline: none;
+      border-color: #2ecc71;
+      box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.15);
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      cursor: pointer;
+      color: #333;
+      margin: 0.3rem 0;
+    }
+
+    .checkbox-item input {
+      width: auto;
+      margin: 0;
+      accent-color: #2ecc71;
+    }
+
+    #book-btn {
+      margin-top: 1rem;
+      background: #2ecc71;
+      color: white;
+      border: none;
+      padding: 0.75rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 1.1rem;
+      width: 100%;
+      transition: background 0.25s, transform 0.2s;
+      box-shadow: 0 4px 10px rgba(46, 204, 113, 0.2);
+    }
+
+    #book-btn:hover:not(:disabled) {
+      background: #27ae60;
+      transform: translateY(-2px);
+    }
+
+    #book-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .cost-result {
+      margin-top: 1.2rem;
+      padding: 1.2rem;
+      background: #f9f9f9;
+      border-radius: 10px;
+      border-left: 4px solid #2ecc71;
+    }
+
+    .cost-result h3 {
+      margin: 0 0 0.5rem;
+      color: #222;
+      font-size: 1.2rem;
+    }
+
+    #cost-breakdown {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #555;
+      margin: 0;
+    }
+
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(46, 204, 113, 0.95);
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      opacity: 0;
+      transform: translateX(100%);
+      transition: all 0.4s ease;
+      z-index: 1000;
+    }
+
+    .notification.show {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* === НАДПИСЬ НАД КАРТОЙ === */
+    .map-title {
+      text-align: center;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #222;
+      margin: 2rem auto 1.2rem;
+      background: white;
+      padding: 0.8rem 1.4rem;
+      border-radius: 10px;
+      border: 1px solid #e0e0e0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      max-width: 600px;
+      position: relative;
+    }
+
+    .map-title::after {
+      content: "";
+      display: block;
+      width: 50px;
+      height: 3px;
+      background: #2ecc71;
+      margin: 0.6rem auto 0;
+      border-radius: 2px;
+    }
+
+    /* === КАРТА И КНОПКИ === */
+    .map-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.4rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .map-nav-btn {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: rgba(30, 30, 30, 0.6);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.25s ease;
+      flex-shrink: 0;
+    }
+
+    .map-nav-btn:hover {
+      background: rgba(46, 204, 113, 0.9);
+      transform: scale(1.1);
+    }
+
+    .map-nav-btn svg {
+      width: 24px;
+      height: 24px;
+      fill: white;
+    }
+
+    #map {
+      flex: 1;
+      height: 78vh;
+      min-width: 320px;
+      max-width: 1100px;
+      border-radius: 14px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
+    }
+
+    @media (max-width: 768px) {
+      .map-wrapper {
+        flex-direction: column;
+        gap: 1.2rem;
+      }
+      .map-nav-btn {
+        align-self: center;
+      }
+      #map {
+        height: 65vh;
+      }
+    }
+
+    /* === СТИЛИ ДЛЯ СЛАЙДЕРА ФОТО === */
+    .popup-content {
+      max-width: 300px;
+      font-family: inherit;
+    }
+    .popup-content h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1.1rem;
+      color: #222;
+    }
+    .popup-content p {
+      margin: 0 0 0.8rem;
+      font-size: 0.95rem;
+      color: #555;
+      line-height: 1.4;
+    }
+    .photo-slider {
+      position: relative;
+      width: 100%;
+      height: 160px;
+      overflow: hidden;
+      border-radius: 8px;
+      background: #f5f5f5;
+    }
+    .photo-slider img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+    .photo-slider img.active {
+      display: block;
+    }
+    .slider-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 28px;
+      height: 28px;
+      background: rgba(0,0,0,0.4);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    .slider-nav.left { left: 6px; }
+    .slider-nav.right { right: 6px; }
+    .slider-nav:hover {
+      background: rgba(46, 204, 113, 0.8);
+    }
+    .photo-counter {
+      position: absolute;
+      bottom: 6px;
+      right: 6px;
+      background: rgba(0,0,0,0.5);
+      color: white;
+      padding: 2px 6px;
+      border-radius: 10px;
+      font-size: 11px;
+    }
+
+    /* === БЛОК БРОНИРОВАНИЯ === */
+    .booking-section {
+      margin: 4rem 0 3rem;
+    }
+
+    .booking-section h2 {
+      text-align: center;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #222;
+    }
+
+    .booking-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+
+    .booking-card {
+      background: white;
+      padding: 1.8rem;
+      border-radius: 14px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+      border: 2px solid #e0e0e0;
+    }
+
+    .booking-card h3 {
+      margin-top: 0;
+      color: #222;
+      font-size: 1.3rem;
+    }
+
+    .booking-card p {
+      color: #555;
+      line-height: 1.6;
+      margin-bottom: 1.2rem;
+    }
+
+    .btn-booking {
+      display: inline-block;
+      background: #2ecc71;
+      color: white;
+      text-decoration: none;
+      padding: 0.7rem 1.4rem;
+      border-radius: 10px;
+      font-weight: 700;
+      transition: background 0.25s, transform 0.2s;
+      box-shadow: 0 4px 10px rgba(46, 204, 113, 0.2);
+    }
+
+    .btn-booking:hover {
+      background: #27ae60;
+      transform: translateY(-2px);
+    }
+  </style>
 </head>
 <body>
 
@@ -13,69 +448,399 @@
     <nav>
       <ul>
         <li><a href="index.html">Главная</a></li>
-        <li><a href="catalog.html">Каталог туров</a></li>
-        <li><a href="test.html">Пройти тест</a></li>
+        <li><a href="obzor.html">Информация</a></li>
+        <li><a href="test.html">Путеводитель</a></li>
+        <li><a href="catalog.html">Маршруты</a></li>
+        <li><a href="gallery.html">Галерея</a></li>
       </ul>
     </nav>
   </header>
 
   <div class="container">
-    <h1>Путеводитель: «Дикая Камчатка»</h1>
+    <h1>Южная Камчатка</h1>
     
-    <div class="highlight-fact">
-      <p><strong>Экспедиция в нетронутую природу — для тех, кто уже знает Камчатку.</strong></p>
+    <div class="route-intro">
+      <p>7-дневный тур по живописным бухтам, водопадам и вулканам юга Камчатки. Идеально для тех, кто хочет увидеть разнообразие природы без экстремальных восхождений.</p>
     </div>
 
-    <section class="intro-features">
-      <h2>Детали маршрута</h2>
-      <div class="features-grid">
-        <div class="feature-card">
-          <h3>Длительность</h3>
-          <p>12–16 дней</p>
-        </div>
-        <div class="feature-card">
-          <h3>Уровень</h3>
-          <p>Экспедиционный / Экстремальный</p>
-        </div>
-        <div class="feature-card">
-          <h3>Регион</h3>
-          <p>Заповедники, труднодоступные районы</p>
-        </div>
+    <section class="itinerary">
+      <h2>Подробный маршрут</h2>
+      <div class="day-card">
+        <h3>День 1 — Прибытие</h3>
+        <p>Аэропорт Елизово → заселение в отель → адаптация.</p>
+      </div>
+      <div class="day-card">
+        <h3>День 2 — Бухты и смотровые</h3>
+        <p>Скалы «Три Брата» → бухта Узовская → Камчатский камень.</p>
+      </div>
+      <div class="day-card">
+        <h3>День 3 — Водопады и перевалы</h3>
+        <p>Вилючинский водопад → Перевал Вилючинский.</p>
+      </div>
+      <div class="day-card">
+        <h3>День 4 — Бухта Русская</h3>
+        <p>Экскурсия в бухту Русская — дикая природа и панорама Тихого океана.</p>
+      </div>
+      <div class="day-card">
+        <h3>День 5 — Вулкан Ксудач</h3>
+        <p>Треккинг к кальдере вулкана Ксудач — одно из самых живописных мест Камчатки.</p>
+      </div>
+      <div class="day-card">
+        <h3>День 6 — Озеро и источники</h3>
+        <p>Озеро Курильское → Дачные горячие источники.</p>
+      </div>
+      <div class="day-card">
+        <h3>День 7 — Возвращение</h3>
+        <p>Свободный день → подготовка к вылету.</p>
       </div>
     </section>
 
-    <h2>Ключевые локации</h2>
-    <div class="features-grid">
-      <div class="feature-card">
-        <h3>Озеро Курильское</h3>
-        <p>Наблюдение за бурыми медведями в естественной среде. Лодочная экспедиция.</p>
-      </div>
-      <div class="feature-card">
-        <h3>Кроноцкий заповедник</h3>
-        <p>Долина Гейзеров, водопады, сейсмически активные зоны. Доступ — только с разрешением.</p>
-      </div>
-      <div class="feature-card">
-        <h3>Палана и север</h3>
-        <p>Тундра, вулканы Толбачик и Шивелуч, этнографические встречи с коренными народами.</p>
-      </div>
-      <div class="feature-card">
-        <h3>Вертолётная логистика</h3>
-        <p>Перемещение по региону — на вертолёте. Минимум инфраструктуры, максимум дикости.</p>
-      </div>
-      <div class="feature-card">
-        <h3>Автономные лагеря</h3>
-        <p>Ночёвки в палатках, готовка на костре, полная самообеспеченность.</p>
-      </div>
+    <section class="hotels-section logistics-section">
+      <h2>Выберите и забронируйте жильё</h2>
+      <p>Все варианты находятся в зоне доступности к точкам маршрута.</p>
+      <div class="hotel-options" id="hotel-options"></div>
+    </section>
+
+    <section id="transport" class="logistics-section">
+      <h2>Как добраться: трансфер и стоимость</h2>
+      <ul class="transport-list">
+        <li><strong>Аэропорт → отель</strong>: ~<span class="price-tag">600 ₽</span></li>
+        <li><strong>Трансфер к бухтам</strong>: ~<span class="price-tag">2 500 ₽</span></li>
+        <li><strong>Экскурсия на Ксудач</strong>: ~<span class="price-tag">15 000 ₽</span> (с лодкой)</li>
+        <li><strong>Гид на все дни</strong>: от <span class="price-tag">8 000 ₽/день</span></li>
+      </ul>
+      <p class="note">Цены ориентировочные. Некоторые точки доступны только с гидом.</p>
+    </section>
+
+    <section id="calculator" class="logistics-section">
+      <form id="trip-calculator" class="calculator-form">
+        <h2>Рассчитайте стоимость</h2>
+        <div class="form-row">
+          <label for="checkin">Заезд:</label>
+          <input type="date" id="checkin" required>
+        </div>
+        <div class="form-row">
+          <label for="checkout">Выезд:</label>
+          <input type="date" id="checkout" required>
+        </div>
+        <div class="form-row">
+          <label for="adults">Взрослые:</label>
+          <select id="adults" required>
+            <option value="1">1</option>
+            <option value="2" selected>2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label for="children">Дети:</label>
+          <select id="children">
+            <option value="0" selected>0</option>
+            <option value="1">1</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label for="user-email">Ваш email:</label>
+          <input type="email" id="user-email" required placeholder="ivan@example.com">
+        </div>
+        <div class="form-row checkboxes">
+          <label>Опции:</label>
+          <label class="checkbox-item">
+            <input type="checkbox" id="transfer-airport"> Аэропорт ↔ отель (600 ₽)
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" id="boat-ksudach"> Экскурсия на Ксудач (15 000 ₽)
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" id="guide-all"> Гид на все дни (8 000 ₽/день)
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" id="transfer-bays"> Трансфер к бухтам (2 500 ₽)
+          </label>
+        </div>
+        <div id="cost-result" class="cost-result">
+          <h3>Итог: <span id="total-amount">—</span> ₽</h3>
+          <p id="cost-breakdown"></p>
+        </div>
+        <button id="book-btn" disabled>Забронировать отель</button>
+      </form>
+    </section>
+
+    <div class="map-title" id="map-title">Полный маршрут</div>
+    <div class="map-wrapper">
+      <button class="map-nav-btn left" id="nav-prev">
+        <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg>
+      </button>
+      <div id="map"></div>
+      <button class="map-nav-btn right" id="nav-next">
+        <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+      </button>
     </div>
 
-    <div class="highlight-fact" style="margin: 2rem 0;">
-      <p><strong>Важно:</strong> маршрут требует предварительного согласования, допуска и сопровождения сертифицированного гида.</p>
-    </div>
-
-    <div class="cta-buttons" style="margin-top: 2.5rem;">
-      <a href="catalog.html" class="btn">Перейти к каталогу туров</a>
-    </div>
+    <section class="booking-section logistics-section">
+      <h2>Организуйте поездку</h2>
+      <div class="booking-cards">
+        <div class="booking-card">
+          <h3>Проживание</h3>
+          <p>Забронируйте отель в базовом лагере.</p>
+          <a href="https://www.booking.com" target="_blank" class="btn-booking">Booking.com</a>
+        </div>
+        <div class="booking-card">
+          <h3>Южный тур</h3>
+          <p>Закажите полный пакет с гидом и трансфером.</p>
+          <a href="mailto:info@ognevkamchatka.ru?subject=Заказ%20тура%20Южная%20Камчатка" class="btn-booking">Заказать тур</a>
+        </div>
+      </div>
+    </section>
   </div>
+
+  <div id="notification" class="notification">Отель забронирован</div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // === ОТЕЛИ ===
+    const hotels = [
+      { id: 'kamchatka-shale', name: 'Камчатка Шале', location: [53.1667, 158.4583], price: 7000, img: 'photos/guide1/shele.jpg', desc: 'Современный отель в Елизово, 5 мин от аэропорта.' },
+      { id: 'avacha-hotel', name: 'Отель «Авача»', location: [52.99, 158.65], price: 8500, img: 'photos/guide1/awacha.webp', desc: 'Центр Петропавловска, вид на бухту.' },
+      { id: 'nalychevo-lodge', name: 'Эко-лодж «Налычево»', location: [53.10, 158.10], price: 6000, img: 'photos/guide1/eko.webp', desc: 'В тайге, у подножия вулканов.' }
+    ];
+
+    const dayNames = [
+      "Полный маршрут",
+      "День 1: Прибытие",
+      "День 2: Бухты и смотровые",
+      "День 3: Водопады и перевалы",
+      "День 4: Бухта Русская",
+      "День 5: Вулкан Ксудач",
+      "День 6: Озеро и источники",
+      "День 7: Возвращение"
+    ];
+
+    // === ТОЧКИ ДЛЯ guide3 ===
+    const dailyPoints = [
+      [], // 0
+      // День 2
+      [
+        { name: "Скалы Три брата", lat: 52.893022, lng: 158.689039, description: "Панорамная смотровая площадка на три скалы-близнеца.", photos: ["photos/guide3/tri-brata1.jpg", "photos/guide3/tri-brata2.jpg"] },
+        { name: "Бухта Узовская", lat: 52.955281, lng: 158.648884, description: "Тихая бухта с видом на Авачинскую губу.", photos: ["photos/guide3/uzovskaya1.jpg", "photos/guide3/uzovskaya2.jpg"] },
+        { name: "Камчатский камень", lat: 52.974428, lng: 158.735664, description: "Известная скала-сима на берегу океана.", photos: ["photos/guide3/kamchatka-stone1.jpg", "photos/guide3/kamchatka-stone2.jpg"] }
+      ],
+      // День 3
+      [
+        { name: "Вилючинский водопад", lat: 52.717494, lng: 158.238498, description: "Живописный водопад в долине реки Вилючинская.", photos: ["photos/guide3/vilyuch-vod1.jpg", "photos/guide3/vilyuch-vod2.jpg"] },
+        { name: "Перевал Вилючинский", lat: 52.673635, lng: 158.184401, description: "Высота 1000 м, вид на вулкан Вилючинский.", photos: ["photos/guide3/vilyuch-pass1.jpg", "photos/guide3/vilyuch-pass2.jpg"] }
+      ],
+      // День 4
+      [
+        { name: "Бухта Русская", lat: 52.423705, lng: 158.456043, description: "Дикая бухта с богатой флорой и фауной.", photos: ["photos/guide3/russkaya-bay1.jpg", "photos/guide3/russkaya-bay2.jpg"] }
+      ],
+      // День 5
+      [
+        { name: "Вулкан Ксудач", lat: 51.809714, lng: 157.527769, description: "Кальдера с озёрами и фумаролами, доступна на лодке.", photos: ["photos/guide3/ksudach1.jpg", "photos/guide3/ksudach2.jpg"] }
+      ],
+      // День 6
+      [
+        { name: "Озеро Курильское", lat: 51.455574, lng: 157.099308, description: "Крупнейшее нерестовое озеро Камчатки, обиталище лосося.", photos: ["photos/guide3/kurilskoe-lake1.jpg", "photos/guide3/kurilskoe-lake2.jpg"] },
+        { name: "Дачные горячие источники", lat: 52.530213, lng: 158.191868, description: "Термальные источники в живописной долине.", photos: ["photos/guide3/dachnye-springs1.jpg", "photos/guide3/dachnye-springs2.jpg"] }
+      ],
+      // День 7 — нет точек
+      []
+    ];
+
+    // === АЭРОПОРТ ===
+    const airportPoint = {
+      name: "Аэропорт Елизово",
+      lat: 53.1667,
+      lng: 158.4167,
+      description: "Основной аэропорт Камчатки.",
+      photos: ["photos/guide3/aeroport1.jpg", "photos/guide3/aeroport2.jpg"]
+    };
+
+    // === ВСЕ ОСТАЛЬНОЕ БЕЗ ИЗМЕНЕНИЙ ===
+    let selectedHotel = null;
+    let currentMarkers = [];
+    let currentPolyline = null;
+    let currentView = 0;
+
+    const map = L.map('map').setView([62, 95], 3);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap contributors' }).addTo(map);
+    map.attributionControl.setPrefix(false);
+
+    const hotelOptionsEl = document.getElementById('hotel-options');
+    hotels.forEach(hotel => {
+      const card = document.createElement('div');
+      card.className = 'hotel-card';
+      card.innerHTML = `<img src="${hotel.img}" alt="${hotel.name}" class="hotel-img">
+        <div class="hotel-info"><h3>${hotel.name}</h3><p>${hotel.desc}</p><p class="hotel-price">От ${hotel.price.toLocaleString('ru')} ₽ / ночь</p></div>`;
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.hotel-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        selectedHotel = hotel;
+        document.getElementById('book-btn').disabled = false;
+        calculateCost();
+        updateMap();
+      });
+      hotelOptionsEl.appendChild(card);
+    });
+
+    function createNumberedIcon(number) {
+  return L.divIcon({
+    className: 'numbered-marker',
+    html: `<div style="
+      background: #2ecc71;
+      color: white;
+      font-weight: bold;
+      font-size: 12px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      /* УБРАЛИ ВСЁ, ЧТО МОЖЕТ ДАВАТЬ РАМКУ */
+      border: none;
+      padding: 0;
+      margin: 0;
+      outline: none;
+    ">${number}</div>`,
+    iconSize: [24, 24],
+    iconAnchor: [12, 12]
+  });
+}
+    function createPopupContent(point) {
+      const photos = point.photos || [];
+      const photoHtml = photos.map((url, idx) => `<img src="${url}" class="${idx === 0 ? 'active' : ''}">`).join('');
+      return `<div class="popup-content"><h3>${point.name}</h3><p>${point.description || ''}</p><div class="photo-slider">${photoHtml}${photos.length > 1 ? `<button class="slider-nav left" data-dir="-1">‹</button><button class="slider-nav right" data-dir="1">›</button><div class="photo-counter">1 / ${photos.length}</div>` : ''}</div></div>`;
+    }
+
+    function initSlider(node) {
+      const slider = node.querySelector('.photo-slider');
+      if (!slider) return;
+      let current = 0;
+      const imgs = slider.querySelectorAll('img');
+      const counter = slider.querySelector('.photo-counter');
+      const total = imgs.length;
+      slider.querySelectorAll('.slider-nav').forEach(btn => {
+        btn.addEventListener('click', () => {
+          imgs[current].classList.remove('active');
+          current = (current + +btn.dataset.dir + total) % total;
+          imgs[current].classList.add('active');
+          if (counter) counter.textContent = `${current + 1} / ${total}`;
+        });
+      });
+    }
+
+    function clearMapLayers() {
+      currentMarkers.forEach(m => map.removeLayer(m));
+      currentMarkers = [];
+      if (currentPolyline) map.removeLayer(currentPolyline);
+      currentPolyline = null;
+    }
+
+    function showFullRoute() {
+      clearMapLayers();
+      let points = [airportPoint];
+      if (selectedHotel) points.push({ name: selectedHotel.name, lat: selectedHotel.location[0], lng: selectedHotel.location[1], description: selectedHotel.desc, photos: [selectedHotel.img] });
+      for (let i = 1; i <= 6; i++) points = points.concat(dailyPoints[i] || []);
+      const valid = points.filter(p => p.lat != null && p.lng != null);
+      valid.forEach((p, i) => {
+        const icon = createNumberedIcon(i + 1);
+        const m = L.marker([p.lat, p.lng], { icon }).addTo(map);
+        const popup = L.popup({ maxWidth: 320 }).setContent(createPopupContent(p));
+        m.bindPopup(popup);
+        m.on('popupopen', () => initSlider(popup._contentNode));
+        currentMarkers.push(m);
+      });
+      if (valid.length > 0) map.fitBounds(L.latLngBounds(valid.map(p => [p.lat, p.lng])), { padding: [100, 100], maxZoom: 9 });
+      else map.setView([53.0, 158.5], 8);
+    }
+
+    function showDayRoute(dayIndex) {
+      clearMapLayers();
+      let points = [];
+      if (dayIndex === 1) {
+        points.push(airportPoint);
+        if (selectedHotel) points.push({ name: selectedHotel.name, lat: selectedHotel.location[0], lng: selectedHotel.location[1], description: selectedHotel.desc, photos: [selectedHotel.img] });
+      } else {
+        if (selectedHotel) points.push({ name: selectedHotel.name, lat: selectedHotel.location[0], lng: selectedHotel.location[1], description: selectedHotel.desc, photos: [selectedHotel.img] });
+        points = points.concat(dailyPoints[dayIndex - 1] || []);
+      }
+      const valid = points.filter(p => p.lat != null && p.lng != null);
+      if (valid.length === 0) { map.setView([53.0, 158.5], 8); return; }
+      valid.forEach((p, i) => {
+        const icon = createNumberedIcon(i + 1);
+        const m = L.marker([p.lat, p.lng], { icon }).addTo(map);
+        const popup = L.popup({ maxWidth: 320 }).setContent(createPopupContent(p));
+        m.bindPopup(popup);
+        m.on('popupopen', () => initSlider(popup._contentNode));
+        currentMarkers.push(m);
+      });
+      if (valid.length >= 2) {
+        const latlngs = valid.map(p => [p.lat, p.lng]);
+        currentPolyline = L.polyline(latlngs, { color: '#2ecc71', weight: 4, opacity: 0.8 }).addTo(map);
+      }
+      map.fitBounds(L.latLngBounds(valid.map(p => [p.lat, p.lng])), { padding: [100, 100], maxZoom: 10 });
+    }
+
+    function updateMap() {
+      document.getElementById('map-title').textContent = dayNames[currentView];
+      if (currentView === 0) showFullRoute();
+      else showDayRoute(currentView);
+    }
+
+    // === КАЛЬКУЛЯТОР ===
+    const checkinEl = document.getElementById('checkin');
+    const checkoutEl = document.getElementById('checkout');
+    const adultsEl = document.getElementById('adults');
+    const childrenEl = document.getElementById('children');
+    const userEmailEl = document.getElementById('user-email');
+    const checkboxes = {
+      transferAirport: document.getElementById('transfer-airport'),
+      boatKsudach: document.getElementById('boat-ksudach'),
+      guideAll: document.getElementById('guide-all'),
+      transferBays: document.getElementById('transfer-bays')
+    };
+
+    const today = new Date();
+    const defaultCheckin = new Date(today);
+    const defaultCheckout = new Date(today);
+    defaultCheckout.setDate(today.getDate() + 7);
+    const formatDate = d => d.toISOString().split('T')[0];
+    checkinEl.value = formatDate(defaultCheckin);
+    checkoutEl.value = formatDate(defaultCheckout);
+
+    function calculateCost() {
+      const nights = (new Date(checkoutEl.value) - new Date(checkinEl.value)) / (1000 * 60 * 60 * 24);
+      const room = Math.max(0, nights) * (selectedHotel ? selectedHotel.price : 7000);
+      let add = 0;
+      if (checkboxes.transferAirport.checked) add += 600;
+      if (checkboxes.boatKsudach.checked) add += 15000;
+      if (checkboxes.guideAll.checked) add += (nights * 8000);
+      if (checkboxes.transferBays.checked) add += 2500;
+      const total = Math.round(room + add);
+      document.getElementById('total-amount').textContent = total.toLocaleString('ru');
+      document.getElementById('cost-breakdown').innerHTML = 
+        `<strong>Жильё:</strong> ${nights} ноч. × ${(selectedHotel?.price || 7000).toLocaleString('ru')} ₽ = ${Math.round(room).toLocaleString('ru')} ₽<br>` +
+        (add > 0 ? `<strong>Дополнительно:</strong> ${add.toLocaleString('ru')} ₽` : '');
+    }
+
+    [checkinEl, checkoutEl, adultsEl, childrenEl].forEach(el => el.addEventListener('change', calculateCost));
+    Object.values(checkboxes).forEach(cb => cb.addEventListener('change', calculateCost));
+    calculateCost();
+
+    document.getElementById('book-btn').addEventListener('click', () => {
+      if (!selectedHotel) { alert('Выберите отель'); return; }
+      document.getElementById('notification').textContent = "Отель забронирован";
+      document.getElementById('notification').classList.add('show');
+      setTimeout(() => document.getElementById('notification').classList.remove('show'), 4000);
+    });
+
+    document.getElementById('nav-prev').addEventListener('click', () => { if (currentView > 0) { currentView--; updateMap(); } });
+    document.getElementById('nav-next').addEventListener('click', () => { if (currentView < 7) { currentView++; updateMap(); } });
+
+    updateMap();
+  </script>
 
   <footer>
     <p>© 2025 Можерина С.Д. «Огненная Камчатка» — интерактивный путеводитель</p>
