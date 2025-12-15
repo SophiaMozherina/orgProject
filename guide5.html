@@ -3,11 +3,18 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <title>Дикие уголки Камчатки — маршрут</title>
   <link rel="stylesheet" href="style/style.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <style>
+    :root {
+      --map-min-height: 400px;
+      --map-max-width: 1100px;
+      --map-border-radius: 14px;
+      --map-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
+    }
+
     .route-intro {
       margin-bottom: 3rem;
     }
@@ -270,6 +277,10 @@
       gap: 1.4rem;
       margin-top: 1rem;
       flex-wrap: wrap;
+      width: 100%;
+      max-width: var(--map-max-width);
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .map-nav-btn {
@@ -297,66 +308,51 @@
       fill: white;
     }
 
-    /* === КАРТА И КНОПКИ === */
-/* === КАРТА И КНОПКИ === */
-.map-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1.4rem;
-  margin-top: 1rem;
-  flex-wrap: wrap;
-}
+    #map {
+      flex: 1 1 auto;
+      min-height: var(--map-min-height);
+      width: 100%;
+      max-width: 100%;
+      border-radius: var(--map-border-radius);
+      box-shadow: var(--map-shadow);
+      background: #f3f3f3;
+      overflow: hidden;
+    }
 
-.map-nav-btn {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: rgba(30, 30, 30, 0.6);
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.25s ease;
-  flex-shrink: 0;
-}
+    @media (max-width: 768px) {
+      .map-wrapper {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+      .map-nav-btn {
+        align-self: center;
+      }
+      #map {
+        min-height: 320px;
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 1rem;
+      }
+      .map-title {
+        font-size: 1.4rem;
+        padding: 0.6rem 1rem;
+        max-width: 95%;
+      }
+    }
 
-.map-nav-btn:hover {
-  background: rgba(46, 204, 113, 0.9);
-  transform: scale(1.1);
-}
-
-.map-nav-btn svg {
-  width: 24px;
-  height: 24px;
-  fill: white;
-}
-
-#map {
-  flex: 1;
-  height: calc(100vh - 200px); /* ← адаптивная высота */
-  min-height: 300px; /* ← минимальная высота для маленьких экранов */
-  min-width: 320px;
-  max-width: 1100px;
-  border-radius: 14px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
-  background: #f3f3f3;
-}
-
-@media (max-width: 768px) {
-  .map-wrapper {
-    flex-direction: column;
-    gap: 1.2rem;
-  }
-  .map-nav-btn {
-    align-self: center;
-  }
-  #map {
-    height: calc(100vh - 250px); /* ← чуть меньше на мобилке */
-    min-height: 300px;
-  }
-}
+    @media (max-width: 480px) {
+      .map-wrapper {
+        margin-top: 0.5rem;
+      }
+      #map {
+        min-height: 280px;
+      }
+      .map-title {
+        font-size: 1.2rem;
+        padding: 0.5rem 0.8rem;
+      }
+    }
 
     /* === СТИЛИ ДЛЯ СЛАЙДЕРА ФОТО === */
     .popup-content {
@@ -459,25 +455,23 @@
 
     .booking-card p {
       color: #555;
+      line-height: 1;
       line-height: 1.6;
-      margin-bottom: 1.2rem;
+      margin: 0;
     }
 
-    .btn-booking {
+    .booking-card a {
       display: inline-block;
-      background: #2ecc71;
-      color: white;
+      margin-top: 1rem;
+      color: #2ecc71;
       text-decoration: none;
-      padding: 0.7rem 1.4rem;
-      border-radius: 10px;
-      font-weight: 700;
-      transition: background 0.25s, transform 0.2s;
-      box-shadow: 0 4px 10px rgba(46, 204, 113, 0.2);
+      font-weight: 600;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.2s;
     }
 
-    .btn-booking:hover {
-      background: #27ae60;
-      transform: translateY(-2px);
+    .booking-card a:hover {
+      border-color: #2ecc71;
     }
   </style>
 </head>
@@ -495,11 +489,12 @@
     </nav>
   </header>
 
+
   <div class="container">
     <h1>Дикие уголки Камчатки</h1>
     
     <div class="route-intro">
-      <p>7-дневный экспедиционный тур в самые удалённые и дикие места Камчатки: Долина гейзеров, Кроноцкий заповедник и вулканические ландшафты. Требуется организация через турфирму.</p>
+      <p>7‑дневный экспедиционный тур в самые удалённые и дикие места Камчатки: Долина гейзеров, Кроноцкий заповедник и вулканические ландшафты. Требуется организация через турфирму.</p>
     </div>
 
     <section class="itinerary">
@@ -534,22 +529,25 @@
       </div>
     </section>
 
+
     <section class="hotels-section logistics-section">
       <h2>Выберите базовый отель</h2>
-      <p>Рекомендуем отели в Елизово или Петропавловске-Камчатском.</p>
+      <p>Рекомендуем отели в Елизово или Петропавловске‑Камчатском.</p>
       <div class="hotel-options" id="hotel-options"></div>
     </section>
+
 
     <section id="transport" class="logistics-section">
       <h2>Как добраться: трансфер и стоимость</h2>
       <ul class="transport-list">
-        <li><strong>Аэропорт → отель</strong>: ~<span class="price-tag">600 ₽</span></li>
-        <li><strong>Вертолёт в Долину гейзеров</strong>: ~<span class="price-tag">30 000 ₽</span></li>
-        <li><strong>Экскурсия в Кроноцкий заповедник</strong>: ~<span class="price-tag">25 000 ₽</span></li>
-        <li><strong>Гид на все дни</strong>: от <span class="price-tag">10 000 ₽/день</span></li>
+        <li><strong>Аэропорт → отель</strong>: ~<span class="price-tag">600 ₽</span></li>
+        <li><strong>Вертолёт в Долину гейзеров</strong>: ~<span class="price-tag">30 000 ₽</span></li>
+        <li><strong>Экскурсия в Кроноцкий заповедник</strong>: ~<span class="price-tag">25 000 ₽</span></li>
+        <li><strong>Гид на все дни</strong>: от <span class="price-tag">10 000 ₽/день</span></li>
       </ul>
       <p class="note">Цены ориентировочные. Вертолёт бронируется заранее.</p>
     </section>
+
 
     <section id="calculator" class="logistics-section">
       <form id="trip-calculator" class="calculator-form">
@@ -585,20 +583,20 @@
         <div class="form-row checkboxes">
           <label>Опции:</label>
           <label class="checkbox-item">
-            <input type="checkbox" id="transfer-airport"> Аэропорт ↔ отель (600 ₽)
+            <input type="checkbox" id="transfer-airport"> Аэропорт ↔ отель (600 ₽)
           </label>
           <label class="checkbox-item">
-            <input type="checkbox" id="helicopter-geysers"> Вертолёт в Долину гейзеров (30 000 ₽)
+            <input type="checkbox" id="helicopter-geysers"> Вертолёт в Долину гейзеров (30 000 ₽)
           </label>
           <label class="checkbox-item">
-            <input type="checkbox" id="kronotsky-tour"> Экскурсия в Кроноцкий (25 000 ₽)
+            <input type="checkbox" id="kronotsky-tour"> Экскурсия в Кроноцкий (25 000 ₽)
           </label>
           <label class="checkbox-item">
-            <input type="checkbox" id="expedition-guide"> Гид на все дни (10 000 ₽/день)
+            <input type="checkbox" id="expedition-guide"> Гид на все дни (10 000 ₽/день)
           </label>
         </div>
         <div id="cost-result" class="cost-result">
-          <h3>Итог: <span id="total-amount">—</span> ₽</h3>
+          <h3>Итог: <span id="total-amount">—</span> ₽</h3>
           <p id="cost-breakdown"></p>
         </div>
         <button id="book-btn" disabled>Забронировать отель</button>
@@ -607,312 +605,85 @@
 
     <div class="map-title" id="map-title">Полный маршрут</div>
     <div class="map-wrapper">
-      <button class="map-nav-btn left" id="nav-prev">
-        <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg>
+      <button class="map-nav-btn" id="zoom-in">
+        <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
       </button>
       <div id="map"></div>
-      <button class="map-nav-btn right" id="nav-next">
-        <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+      <button class="map-nav-btn" id="zoom-out">
+        <svg viewBox="0 0 24 24"><path d="M5 15h14v-2H5v2z"/></svg>
       </button>
     </div>
 
-    <section class="booking-section logistics-section">
-      <h2>Организуйте экспедицию</h2>
+    <section class="booking-section">
+      <h2>Бронирование</h2>
       <div class="booking-cards">
         <div class="booking-card">
-          <h3>Проживание</h3>
-          <p>Забронируйте базовый отель перед вылетом.</p>
-          <a href="https://www.booking.com" target="_blank" class="btn-booking">Booking.com</a>
+          <h3>Стандарт</h3>
+          <p>Одноместный номер в отеле 3* с завтраком. Удобное расположение в центре Петропавловска‑Камчатского.</p>
+          <a href="#">Выбрать</a>
         </div>
         <div class="booking-card">
-          <h3>Полный тур</h3>
-          <p>Закажите экспедицию с вертолётом, гидом и питанием.</p>
-          <a href="mailto:info@ognevkamchatka.ru?subject=Заказ%20экспедиции%20Дикие%20уголки" class="btn-booking">Заказать тур</a>
+          <h3>Комфорт</h3>
+          <p>Двухместный номер в отеле 4* с завтраком и видом на вулканы</p>
+          <a href="#">Выбрать</a>
+        </div>
+        <div class="booking-card">
+          <h3>Премиум</h3>
+          <p>Номер «люкс» в отеле 5* с панорамным видом, завтраком и спа‑услугами. Лучший отель города.</p>
+          <a href="#">Выбрать</a>
         </div>
       </div>
     </section>
+
+    <div id="notification" class="notification">Заявка отправлена!</div>
   </div>
 
-  <div id="notification" class="notification">Отель забронирован</div>
-
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script>
-    // === ОТЕЛИ ===
-    const hotels = [
-      { id: 'kamchatka-shale', name: 'Камчатка Шале', location: [53.1667, 158.4583], price: 7000, img: 'photos/guide1/shele.jpg', desc: 'Современный отель в Елизово, 5 мин от аэропорта.' },
-      { id: 'avacha-hotel', name: 'Отель «Авача»', location: [52.99, 158.65], price: 8500, img: 'photos/guide1/awacha.webp', desc: 'Центр Петропавловска, вид на бухту.' },
-      { id: 'nalychevo-lodge', name: 'Эко-лодж «Налычево»', location: [53.10, 158.10], price: 6000, img: 'photos/guide1/eko.webp', desc: 'В тайге, у подножия вулканов.' }
-    ];
-
-    const dayNames = [
-      "Полный маршрут",
-      "День 1: Прибытие",
-      "День 2: Вулканы юга",
-      "День 3: Восточные склоны",
-      "День 4: Заповедник",
-      "День 5: Долина гейзеров",
-      "День 6: Лавовые поля",
-      "День 7: Возвращение"
-    ];
-
-    // === ТОЧКИ ДЛЯ guide5 ===
-    const dailyPoints = [
-      [], // День 0
-      // День 2
-      [
-        { name: "Вулкан Вачкажец", lat: 53.059680, lng: 157.921773, description: "Потухший стратовулкан, высота 1556 м.", photos: ["photos/guide5/vachkazets1.jpg", "photos/guide5/vachkazets2.jpg"] },
-        { name: "Гора Верблюд", lat: 53.271773, lng: 158.764816, description: "Экструзивный купол, напоминающий верблюда.", photos: ["photos/guide5/verblyud1.jpg", "photos/guide5/verblyud2.jpg"] }
-      ],
-      // День 3
-      [
-        { name: "Вулкан Корякский", lat: 53.321646, lng: 158.712608, description: "Действующий стратовулкан, брат Авачинской сопки.", photos: ["photos/guide5/koryaksky1.jpg", "photos/guide5/koryaksky2.jpg"] },
-        { name: "Козельский", lat: 53.226398, lng: 158.887020, description: "Вулкан у подножия Халактырского пляжа.", photos: ["photos/guide5/kozelskiy1.jpg", "photos/guide5/kozelskiy2.jpg"] }
-      ],
-      // День 4
-      [
-        { name: "Кроноцкий заповедник", lat: 54.740764, lng: 160.915946, description: "Биосферный заповедник, обиталище бурых медведей.", photos: ["photos/guide5/kronotsky1.jpg", "photos/guide5/kronotsky2.jpg"] }
-      ],
-      // День 5
-      [
-        { name: "Долина гейзеров", lat: 54.430809, lng: 160.125292, description: "Одно из 7 чудес России, гейзеры и горячие источники.", photos: ["photos/guide5/geysers1.jpg", "photos/guide5/geysers2.jpg"] }
-      ],
-      // День 6
-      [
-        { name: "Мёртвый лес", lat: 55.648859, lng: 160.267156, description: "Застывший лавой лес после извержения Толбачика.", photos: ["photos/guide5/dead-forest1.jpg", "photos/guide5/dead-forest2.jpg"] },
-        { name: "Малкинские источники", lat: 53.322370, lng: 157.539144, description: "Термальные источники в живописной долине.", photos: ["photos/guide5/malki-springs1.jpg", "photos/guide5/malki-springs2.jpg"] }
-      ],
-      // День 7
-      [
-        { name: "Голубые озёра", lat: 53.156619, lng: 158.133206, description: "Группа карстовых озёр с кристально чистой водой.", photos: ["photos/guide5/blue-lakes1.jpg", "photos/guide5/blue-lakes2.jpg"] }
-      ]
-    ];
-
-    // === АЭРОПОРТ ===
-    const airportPoint = {
-      name: "Аэропорт Елизово",
-      lat: 53.1667,
-      lng: 158.4167,
-      description: "Основной аэропорт Камчатки.",
-      photos: ["photos/guide5/aeroport1.jpg", "photos/guide5/aeroport2.jpg"]
-    };
-
-    // === МАРКЕР БЕЗ КВАДРАТИКОВ ===
-    function createNumberedIcon(number) {
-  return L.divIcon({
-    className: 'numbered-marker',
-    html: `<div style="
-      background: #2ecc71;
-      color: white;
-      font-weight: bold;
-      font-size: 12px;
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-      /* УБРАЛИ ВСЁ, ЧТО МОЖЕТ ДАВАТЬ РАМКУ */
-      border: none;
-      padding: 0;
-      margin: 0;
-      outline: none;
-    ">${number}</div>`,
-    iconSize: [24, 24],
-    iconAnchor: [12, 12]
-  });
-}
-
-    // === ПОПАП С ФОТО ===
-    function createPopupContent(point) {
-      const photos = point.photos || [];
-      const photoHtml = photos.map((url, idx) => `<img src="${url}" class="${idx === 0 ? 'active' : ''}">`).join('');
-      return `<div class="popup-content"><h3>${point.name}</h3><p>${point.description || ''}</p><div class="photo-slider">${photoHtml}${photos.length > 1 ? `<button class="slider-nav left" data-dir="-1">‹</button><button class="slider-nav right" data-dir="1">›</button><div class="photo-counter">1 / ${photos.length}</div>` : ''}</div></div>`;
-    }
-
-    // === СЛАЙДЕР ===
-    function initSlider(node) {
-      const slider = node.querySelector('.photo-slider');
-      if (!slider) return;
-      let current = 0;
-      const imgs = slider.querySelectorAll('img');
-      const counter = slider.querySelector('.photo-counter');
-      const total = imgs.length;
-      slider.querySelectorAll('.slider-nav').forEach(btn => {
-        btn.addEventListener('click', () => {
-          imgs[current].classList.remove('active');
-          current = (current + +btn.dataset.dir + total) % total;
-          imgs[current].classList.add('active');
-          if (counter) counter.textContent = `${current + 1} / ${total}`;
-        });
-      });
-    }
-
-    // === ОЧИСТКА КАРТЫ ===
-    function clearMapLayers() {
-      currentMarkers.forEach(m => m.remove());
-      currentMarkers = [];
-      if (currentPolyline) { currentPolyline.remove(); currentPolyline = null; }
-    }
-
-    // === ПОЛНЫЙ МАРШРУТ ===
-    function showFullRoute() {
-      clearMapLayers();
-      let points = [airportPoint];
-      if (selectedHotel) points.push({
-        name: selectedHotel.name,
-        lat: selectedHotel.location[0],
-        lng: selectedHotel.location[1],
-        description: selectedHotel.desc,
-        photos: [selectedHotel.img]
-      });
-      for (let i = 1; i <= 6; i++) points = points.concat(dailyPoints[i] || []);
-      
-      const valid = points.filter(p => p.lat != null && p.lng != null);
-      valid.forEach((p, i) => {
-        const icon = createNumberedIcon(i + 1);
-        const m = L.marker([p.lat, p.lng], { icon }).addTo(map);
-        const popup = L.popup({ maxWidth: 320 }).setContent(createPopupContent(p));
-        m.bindPopup(popup);
-        m.on('popupopen', () => initSlider(popup._contentNode));
-        currentMarkers.push(m);
-      });
-      if (valid.length > 0) map.fitBounds(L.latLngBounds(valid.map(p => [p.lat, p.lng])), { padding: [80, 80], maxZoom: 9 });
-      else map.setView([53.0, 158.5], 8);
-    }
-
-    // === МАРШРУТ ДНЯ ===
-    function showDayRoute(dayIndex) {
-      clearMapLayers();
-      let points = [];
-      if (dayIndex === 1) {
-        points.push(airportPoint);
-        if (selectedHotel) points.push({
-          name: selectedHotel.name,
-          lat: selectedHotel.location[0],
-          lng: selectedHotel.location[1],
-          description: selectedHotel.desc,
-          photos: [selectedHotel.img]
-        });
-      } else {
-        if (selectedHotel) points.push({
-          name: selectedHotel.name,
-          lat: selectedHotel.location[0],
-          lng: selectedHotel.location[1],
-          description: selectedHotel.desc,
-          photos: [selectedHotel.img]
-        });
-        points = points.concat(dailyPoints[dayIndex - 1] || []);
-      }
-      const valid = points.filter(p => p.lat != null && p.lng != null);
-      if (valid.length === 0) { map.setView([53.0, 158.5], 8); return; }
-      valid.forEach((p, i) => {
-        const icon = createNumberedIcon(i + 1);
-        const m = L.marker([p.lat, p.lng], { icon }).addTo(map);
-        const popup = L.popup({ maxWidth: 320 }).setContent(createPopupContent(p));
-        m.bindPopup(popup);
-        m.on('popupopen', () => initSlider(popup._contentNode));
-        currentMarkers.push(m);
-      });
-      if (valid.length >= 2) {
-        const latlngs = valid.map(p => [p.lat, p.lng]);
-        currentPolyline = L.polyline(latlngs, { color: '#2ecc71', weight: 4, opacity: 0.8 }).addTo(map);
-      }
-      map.fitBounds(L.latLngBounds(valid.map(p => [p.lat, p.lng])), { padding: [100, 100], maxZoom: 10 });
-    }
-
-    // === ОБНОВЛЕНИЕ КАРТЫ ===
-    function updateMap() {
-      document.getElementById('map-title').textContent = dayNames[currentView];
-      if (currentView === 0) showFullRoute();
-      else showDayRoute(currentView);
-    }
-
-    // === ИНИЦИАЛИЗАЦИЯ ===
-    let selectedHotel = null;
-    let currentMarkers = [];
-    let currentPolyline = null;
-    let currentView = 0;
-
-    const map = L.map('map').setView([62, 95], 3);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
-    map.attributionControl.setPrefix(false);
-
-    const hotelOptionsEl = document.getElementById('hotel-options');
-    hotels.forEach(hotel => {
-      const card = document.createElement('div');
-      card.className = 'hotel-card';
-      card.innerHTML = `<img src="${hotel.img}" alt="${hotel.name}" class="hotel-img">
-        <div class="hotel-info"><h3>${hotel.name}</h3><p>${hotel.desc}</p><p class="hotel-price">От ${hotel.price.toLocaleString('ru')} ₽ / ночь</p></div>`;
-      card.addEventListener('click', () => {
-        document.querySelectorAll('.hotel-card').forEach(c => c.classList.remove('selected'));
-        card.classList.add('selected');
-        selectedHotel = hotel;
-        document.getElementById('book-btn').disabled = false;
-        calculateCost();
-        updateMap();
-      });
-      hotelOptionsEl.appendChild(card);
-    });
-
-    // === КАЛЬКУЛЯТОР ===
-    const checkinEl = document.getElementById('checkin');
-    const checkoutEl = document.getElementById('checkout');
-    const adultsEl = document.getElementById('adults');
-    const childrenEl = document.getElementById('children');
-    const userEmailEl = document.getElementById('user-email');
-    const checkboxes = {
-      transferAirport: document.getElementById('transfer-airport'),
-      helicopterGeysers: document.getElementById('helicopter-geysers'),
-      kronotskyTour: document.getElementById('kronotsky-tour'),
-      expeditionGuide: document.getElementById('expedition-guide')
-    };
-
-    const today = new Date();
-    const defaultCheckin = new Date(today);
-    const defaultCheckout = new Date(today);
-    defaultCheckout.setDate(today.getDate() + 7);
-    const formatDate = d => d.toISOString().split('T')[0];
-    checkinEl.value = formatDate(defaultCheckin);
-    checkoutEl.value = formatDate(defaultCheckout);
-
-    function calculateCost() {
-      const nights = (new Date(checkoutEl.value) - new Date(checkinEl.value)) / (1000 * 60 * 60 * 24);
-      const room = Math.max(0, nights) * (selectedHotel ? selectedHotel.price : 7000);
-      let add = 0;
-      if (checkboxes.transferAirport.checked) add += 600;
-      if (checkboxes.helicopterGeysers.checked) add += 30000;
-      if (checkboxes.kronotskyTour.checked) add += 25000;
-      if (checkboxes.expeditionGuide.checked) add += (nights * 10000);
-      const total = Math.round(room + add);
-      document.getElementById('total-amount').textContent = total.toLocaleString('ru');
-      document.getElementById('cost-breakdown').innerHTML = 
-        `<strong>Жильё:</strong> ${nights} ноч. × ${(selectedHotel?.price || 7000).toLocaleString('ru')} ₽ = ${Math.round(room).toLocaleString('ru')} ₽<br>` +
-        (add > 0 ? `<strong>Дополнительно:</strong> ${add.toLocaleString('ru')} ₽` : '');
-    }
-
-    [checkinEl, checkoutEl, adultsEl, childrenEl].forEach(el => el.addEventListener('change', calculateCost));
-    Object.values(checkboxes).forEach(cb => cb.addEventListener('change', calculateCost));
-    calculateCost();
-
-    document.getElementById('book-btn').addEventListener('click', () => {
-      if (!selectedHotel) { alert('Выберите отель'); return; }
-      document.getElementById('notification').textContent = "Отель забронирован";
-      document.getElementById('notification').classList.add('show');
-      setTimeout(() => document.getElementById('notification').classList.remove('show'), 4000);
-    });
-
-    document.getElementById('nav-prev').addEventListener('click', () => { if (currentView > 0) { currentView--; updateMap(); } });
-    document.getElementById('nav-next').addEventListener('click', () => { if (currentView < 7) { currentView++; updateMap(); } });
-
-    updateMap();
-  </script>
-
   <footer>
-    <p>© 2025 Можерина С.Д. «Огненная Камчатка» — интерактивный путеводитель</p>
+    <p>&copy; 2025 Дикие уголки Камчатки. Все права защищены.</p>
   </footer>
 
+  <!-- Подключаем Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // Инициализация карты
+    const map = L.map('map', {
+      zoomControl: false, // Убираем стандартный зум-контроль
+      attributionControl: false // Убираем копирайты
+    }).setView([53.035, 158.675], 7); // Центр Камчатки, зум 7
+
+
+    // Добавляем тайловый слой OpenStreetMap
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Кнопки зума
+    document.getElementById('zoom-in').addEventListener('click', () => {
+      map.zoomIn();
+    });
+
+    document.getElementById('zoom-out').addEventListener('click', () => {
+      map.zoomOut();
+    });
+
+    // Маркеры маршрута (пример для ключевых точек)
+    const waypoints = [
+      [53.123, 158.810], // Долина гейзеров
+      [54.050, 160.200], // Кроноцкий заповедник
+      [52.900, 158.100]  // Вулкан Корякский
+    ];
+
+    waypoints.forEach(point => {
+      L.marker(point).addTo(map).bindPopup('Точка маршрута');
+    });
+
+    // Адаптация карты при изменении размера окна
+    window.addEventListener('resize', () => {
+      setTimeout(() => {
+        map.invalidateSize();
+      }, 100);
+    });
+  </script>
 </body>
 </html>
