@@ -319,7 +319,7 @@
         gap: 1rem;
       }
       #map {
-        height: 380px; /* чуть меньше на маленьких экранах */
+        height: 380px;
       }
     }
 
@@ -605,7 +605,7 @@
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
-    // === ВСЁ ОСТАЛЬНОЕ БЕЗ ИЗМЕНЕНИЙ ===
+    // === ОТЕЛИ ===
     const hotels = [
       { id: 'kamchatka-shale', name: 'Камчатка Шале', location: [53.1667, 158.4583], price: 7000, img: 'photos/guide1/shele.jpg', desc: 'Современный отель в Елизово, 5 мин от аэропорта.' },
       { id: 'avacha-hotel', name: 'Отель «Авача»', location: [52.99, 158.65], price: 8500, img: 'photos/guide1/awacha.webp', desc: 'Центр Петропавловска, вид на бухту.' },
@@ -663,30 +663,28 @@
     };
 
     function createNumberedIcon(number) {
-  return L.divIcon({
-    className: 'numbered-marker',
-    html: `<div style="
-      background: #2ecc71;
-      color: white;
-      font-weight: bold;
-      font-size: 12px;
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-      /* УБРАЛИ ВСЁ, ЧТО МОЖЕТ ДАВАТЬ РАМКУ */
-      border: none;
-      padding: 0;
-      margin: 0;
-      outline: none;
-    ">${number}</div>`,
-    iconSize: [24, 24],
-    iconAnchor: [12, 12]
-  });
-}
+      return L.divIcon({
+        html: `<div style="
+          background: #2ecc71;
+          color: white;
+          font-weight: bold;
+          font-size: 12px;
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+          border: none;
+          padding: 0;
+          margin: 0;
+          outline: none;
+        ">${number}</div>`,
+        iconSize: [24, 24],
+        iconAnchor: [12, 12]
+      });
+    }
 
     function createPopupContent(point) {
       const photos = point.photos || [];
