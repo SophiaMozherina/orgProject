@@ -1,4 +1,4 @@
-<!-- active-route.html -->
+<!-- guide2.html -->
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -236,7 +236,7 @@
       transform: translateX(0);
     }
 
-    /* === НАДПИСЬ НАД КАРТОЙ === */
+    /* === ЗАГОЛОВОК КАРТЫ === */
     .map-title {
       text-align: center;
       font-size: 1.6rem;
@@ -262,14 +262,30 @@
       border-radius: 2px;
     }
 
-    /* === КАРТА И КНОПКИ === */
-    .map-wrapper {
+    /* === КОНТЕЙНЕР КАРТЫ — КЛЮЧЕВОЙ БЛОК === */
+    .map-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    #map {
+      width: 100%;
+      height: 400px;
+      border-radius: 14px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
+      background: #f3f3f3;
+      margin: 0 auto;
+      display: block;
+    }
+
+    /* === КНОПКИ НАВИГАЦИИ === */
+    .map-controls {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 1.4rem;
+      gap: 1.5rem;
       margin-top: 1rem;
-      flex-wrap: wrap;
     }
 
     .map-nav-btn {
@@ -283,7 +299,6 @@
       align-items: center;
       justify-content: center;
       transition: all 0.25s ease;
-      flex-shrink: 0;
     }
 
     .map-nav-btn:hover {
@@ -297,33 +312,19 @@
       fill: white;
     }
 
-    /* === КАРТА И КНОПКИ === */
-#map {
-  flex: 1;
-  height: 78vh;
-  min-height: 500px; /* ← КЛЮЧЕВОЕ ИЗМЕНЕНИЕ */
-  min-width: 320px;
-  max-width: 1100px;
-  border-radius: 14px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
-  background: #f3f3f3;
-}
+    @media (max-width: 768px) {
+      .map-container {
+        padding: 0 0.5rem;
+      }
+      .map-controls {
+        gap: 1rem;
+      }
+      #map {
+        height: 380px;
+      }
+    }
 
-@media (max-width: 768px) {
-  .map-wrapper {
-    flex-direction: column;
-    gap: 1.2rem;
-  }
-  .map-nav-btn {
-    align-self: center;
-  }
-  #map {
-    height: 65vh;
-    min-height: 400px; /* ← ОБЯЗАТЕЛЬНО НА МОБИЛКЕ */
-  }
-}
-
-    /* === СТИЛИ ДЛЯ СЛАЙДЕРА ФОТО === */
+    /* === СЛАЙДЕР ФОТО === */
     .popup-content {
       max-width: 300px;
       font-family: inherit;
@@ -572,15 +573,18 @@
       </form>
     </section>
 
+    <!-- === КАРТА В КОНТЕЙНЕРЕ === -->
     <div class="map-title" id="map-title">Полный маршрут</div>
-    <div class="map-wrapper">
-      <button class="map-nav-btn left" id="nav-prev">
-        <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg>
-      </button>
+    <div class="map-container">
       <div id="map"></div>
-      <button class="map-nav-btn right" id="nav-next">
-        <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
-      </button>
+      <div class="map-controls">
+        <button class="map-nav-btn left" id="nav-prev">
+          <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg>
+        </button>
+        <button class="map-nav-btn right" id="nav-next">
+          <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+        </button>
+      </div>
     </div>
 
     <!-- === БРОНИРОВАНИЕ ОТЕЛЯ И ТРАНСФЕР === -->
@@ -651,51 +655,51 @@
       // День 2
       [
         { name: "Перевал Авачинский", lat: 53.279792, lng: 158.772447, 
-        description: "Высота 1199 м, панорама на Авачинскую и Козельский вулканы.", 
-        photos: ["photos/guide1/pereval-avachinskiy-1.jpg", "photos/guide1/pereval-avachinskiy-2.jpg"] },
+          description: "Высота 1199 м, панорама на Авачинскую и Козельский вулканы.", 
+          photos: ["photos/guide1/pereval-avachinskiy-1.jpg", "photos/guide1/pereval-avachinskiy-2.jpg"] },
         { name: "Экструзия «Верблюд»", lat: 53.272061, lng: 158.762104, 
-        description: "Уникальная лавовая форма, напоминающая верблюда.", 
-        photos: ["photos/guide2/extruzia_verblud1.jpg", "photos/guide2/extruzia_verblud2.jpg"] }
+          description: "Уникальная лавовая форма, напоминающая верблюда.", 
+          photos: ["photos/guide2/extruzia_verblud1.jpg", "photos/guide2/extruzia_verblud2.jpg"] }
       ],
       // День 3
       [
         { name: "Авачинская сопка", lat: 53.255368, lng: 158.836210, 
-        description: "Один из самых доступных действующих вулканов.", 
-        photos: ["photos/guide1/avachinskaya-sopka-1.jpg", "photos/guide1/avachinskaya-sopka-2.jpg"] }
+          description: "Один из самых доступных действующих вулканов.", 
+          photos: ["photos/guide1/avachinskaya-sopka-1.jpg", "photos/guide1/avachinskaya-sopka-2.jpg"] }
       ],
 
       // День 4
       [
         { name: "Вулкан Корякский", lat: 53.321646, lng: 158.712608, 
-        description: "Брат Авачинской сопки, высота 3456 м.", 
-        photos: ["photos/guide2/koryatski_vulkan1.jpg", "photos/guide2/koryatski_vulkan2.jpg"] }
+          description: "Брат Авачинской сопки, высота 3456 м.", 
+          photos: ["photos/guide2/koryatski_vulkan1.jpg", "photos/guide2/koryatski_vulkan2.jpg"] }
       ],
       // День 5
       [
         { name: "Паратунские источники", lat: 52.823721, lng: 158.163597, 
-        description: "Термальные бассейны в живописной долине.",
-        photos: ["photos/guide1/paratunka-1.jpg", "photos/guide1/paratunka-2.jpg"] },
+          description: "Термальные бассейны в живописной долине.",
+          photos: ["photos/guide1/paratunka-1.jpg", "photos/guide1/paratunka-2.jpg"] },
         { name: "Халактырский пляж", lat: 52.996220, lng: 158.858922, 
-        description: "Чёрный вулканический пляж на Тихом океане.", 
-        photos: ["photos/guide1/halaktyrskiy-pljazh-1.jpg", "photos/guide1/halaktyrskiy-pljazh-2.jpg"] }
+          description: "Чёрный вулканический пляж на Тихом океане.", 
+          photos: ["photos/guide1/halaktyrskiy-pljazh-1.jpg", "photos/guide1/halaktyrskiy-pljazh-2.jpg"] }
       ],
       // День 6
       [
         { name: "Лава Северного Прорыва", lat: 55.689223, lng: 160.212752, 
-        description: "Застывшие потоки лавы 1975–1976 гг.", 
-        photos: ["photos/guide2/lava_severnogo_poriva1.jpg", "photos/guide2/lava_severnogo_poriva2.jpg"] },
+          description: "Застывшие потоки лавы 1975–1976 гг.", 
+          photos: ["photos/guide2/lava_severnogo_poriva1.jpg", "photos/guide2/lava_severnogo_poriva2.jpg"] },
         { name: "Плоский Толбачик", lat: 55.817869, lng: 160.390152, 
-        description: "Щитовой вулкан, часть Толбачинского массива.", 
-        photos: ["photos/guide2/vulcan_ploski_tolbachik1.jpg", "photos/guide2/vulcan_ploski_tolbachik2.jpg"] },
+          description: "Щитовой вулкан, часть Толбачинского массива.", 
+          photos: ["photos/guide2/vulcan_ploski_tolbachik1.jpg", "photos/guide2/vulcan_ploski_tolbachik2.jpg"] },
         { name: "Толбачик", lat: 56.406441, lng: 161.386572, 
-        description: "Действующий стратовулкан, высота 3682 м.", 
-        photos: ["photos/guide2/tolbachik.jpg", "photos/guide2/tolbachik1.jpg"] }
+          description: "Действующий стратовулкан, высота 3682 м.", 
+          photos: ["photos/guide2/tolbachik.jpg", "photos/guide2/tolbachik1.jpg"] }
       ],
       // День 7
       [
         { name: "Сопка Горелая", lat: 52.558804, lng: 158.036912, 
-        description: "Вулканический конус в районе Усть-Камчатска.", 
-        photos: ["photos/guide2/sopka_gor1.JPG", "photos/guide2/sopka_gor2.JPG"] }
+          description: "Вулканический конус в районе Усть-Камчатска.", 
+          photos: ["photos/guide2/sopka_gor1.JPG", "photos/guide2/sopka_gor2.JPG"] }
       ]
     ];
 
@@ -743,31 +747,33 @@
     });
 
     function createNumberedIcon(number) {
-  return L.divIcon({
-    className: 'numbered-marker',
-    html: `<div style="
-      background: #2ecc71;
-      color: white;
-      font-weight: bold;
-      font-size: 12px;
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-      /* УБРАЛИ border и padding */
-    ">${number}</div>`,
-    iconSize: [24, 24],
-    iconAnchor: [12, 12]
-  });
-}
+      return L.divIcon({
+        html: `<div style="
+          background: #2ecc71;
+          color: white;
+          font-weight: bold;
+          font-size: 12px;
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+          border: none;
+          padding: 0;
+          margin: 0;
+          outline: none;
+        ">${number}</div>`,
+        iconSize: [24, 24],
+        iconAnchor: [12, 12]
+      });
+    }
 
     function createPopupContent(point) {
       const photos = point.photos || [];
       const photoHtml = photos.map((url, idx) => 
-        `<img src="${url}" class="${idx === 0 ? 'active' : ''}" onerror="this.src='https://via.placeholder.com/300x160?text=Фото+недоступно'">`
+        `<img src="${url}" class="${idx === 0 ? 'active' : ''}">`
       ).join('');
 
       return `
@@ -800,10 +806,9 @@
     }
 
     function clearMapLayers() {
-      currentMarkers.forEach(m => map.removeLayer(m));
+      currentMarkers.forEach(m => m.remove());
       currentMarkers = [];
-      if (currentPolyline) map.removeLayer(currentPolyline);
-      currentPolyline = null;
+      if (currentPolyline) { currentPolyline.remove(); currentPolyline = null; }
     }
 
     function showFullRoute() {
