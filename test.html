@@ -1,0 +1,254 @@
+<!-- test.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Анкета — Огненная Камчатка</title>
+  <link rel="stylesheet" href="style/style.css" />
+  <style>
+    /* Сохраняем ваш стиль, но адаптируем под анкету */
+    body {
+      background: var(--secondary);
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 3rem auto;
+      padding: 2.5rem;
+      background: var(--light-bg);
+      border-radius: 12px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.06);
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2.2rem;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    h1::after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 4px;
+      background: var(--accent);
+      margin: 0.8rem auto;
+      border-radius: 2px;
+      animation: pulseGlow 2s infinite alternate;
+    }
+
+    @keyframes pulseGlow {
+      from { box-shadow: 0 0 5px rgba(46, 204, 113, 0.3); }
+      to { box-shadow: 0 0 15px rgba(46, 204, 113, 0.6); }
+    }
+
+    h2 {
+      margin-top: 2rem;
+      margin-bottom: 1.2rem;
+      color: var(--primary);
+      font-size: 1.5rem;
+      position: relative;
+    }
+
+    h2::before {
+      content: '';
+      margin-right: 8px;
+      font-size: 1.2em;
+    }
+
+    .question {
+      margin: 1.4rem 0;
+    }
+
+    .question p {
+      font-weight: 600;
+      margin-bottom: 0.6rem;
+      color: var(--primary);
+    }
+
+    label {
+      display: block;
+      padding: 0.6rem 1rem;
+      margin: 0.3rem 0;
+      background: #f9f9f9;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 1px solid #eee;
+    }
+
+    label:hover {
+      background: rgba(46, 204, 113, 0.05);
+      border-color: rgba(46, 204, 113, 0.3);
+    }
+
+    input[type="radio"], input[type="checkbox"] {
+      margin-right: 10px;
+      transform: scale(1.15);
+    }
+
+    .btn {
+      display: block;
+      margin: 2.5rem auto 1.5rem;
+      padding: 0.8rem 2.2rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      width: fit-content;
+    }
+
+    /* Анимированный фон — тонкий намёк на лаву */
+    .survey-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      background: radial-gradient(circle at 20% 30%, rgba(46, 204, 113, 0.03), transparent 40%),
+                  radial-gradient(circle at 80% 70%, rgba(231, 76, 60, 0.02), transparent 45%);
+    }
+
+    /* Адаптив */
+    @media (max-width: 768px) {
+      .container {
+        margin: 1.5rem;
+        padding: 1.8rem;
+      }
+      h1 {
+        font-size: 1.8rem;
+      }
+      label {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="survey-bg"></div>
+
+  <div class="container">
+    <h1>Подберём ваш идеальный маршрут по Камчатке</h1>
+
+    <form id="surveyForm">
+      <h2>Блок 1. Контекст поездки</h2>
+      <div class="question">
+        <p>1. Сколько дней вы планируете провести на Камчатке?</p>
+        <label><input type="radio" name="days" value="short" required> 3–5</label>
+        <label><input type="radio" name="days" value="medium"> 7–10</label>
+        <label><input type="radio" name="days" value="long"> 10+</label>
+      </div>
+
+      <div class="question">
+        <p>2. Вы впервые на Камчатке?</p>
+        <label><input type="radio" name="firstTime" value="yes" required> Да</label>
+        <label><input type="radio" name="firstTime" value="no"> Нет</label>
+      </div>
+
+      <div class="question">
+        <p>3. С кем вы путешествуете?</p>
+        <label><input type="radio" name="group" value="alone" required> Один</label>
+        <label><input type="radio" name="group" value="couple"> Пара</label>
+        <label><input type="radio" name="group" value="friends"> Компания</label>
+        <label><input type="radio" name="group" value="family"> Семья</label>
+      </div>
+
+      <h2>Блок 2. Уровень активности</h2>
+      <div class="question">
+        <p>4. Какой формат отдыха вам ближе?</p>
+        <label><input type="radio" name="activityType" value="calm" required> Спокойный</label>
+        <label><input type="radio" name="activityType" value="moderate"> Умеренно активный</label>
+        <label><input type="radio" name="activityType" value="active"> Активный</label>
+        <label><input type="radio" name="activityType" value="extreme"> Экстремальный</label>
+      </div>
+
+      <div class="question">
+        <p>5. Готовы ли вы к длительным пешим маршрутам?</p>
+        <label><input type="radio" name="hiking" value="no" required> Нет</label>
+        <label><input type="radio" name="hiking" value="short"> До 5 км</label>
+        <label><input type="radio" name="hiking" value="medium"> 5–10 км</label>
+        <label><input type="radio" name="hiking" value="long"> Более 10 км</label>
+      </div>
+
+      <div class="question">
+        <p>6. Насколько важен комфорт?</p>
+        <label><input type="radio" name="comfort" value="very" required> Очень важен</label>
+        <label><input type="radio" name="comfort" value="medium"> Средне</label>
+        <label><input type="radio" name="comfort" value="low"> Не принципиален</label>
+      </div>
+
+      <h2>Блок 3. Интересы</h2>
+      <div class="question">
+        <p>7. Что для вас важнее всего в поездке?</p>
+        <label><input type="radio" name="priority" value="nature" required> Природа</label>
+        <label><input type="radio" name="priority" value="emotions"> Эмоции</label>
+        <label><input type="radio" name="priority" value="photo"> Фото</label>
+        <label><input type="radio" name="priority" value="places"> Новые места</label>
+      </div>
+
+      <div class="question">
+        <p>8. Какие локации интересуют больше? (можно выбрать несколько)</p>
+        <label><input type="checkbox" name="locations" value="volcanoes"> Вулканы</label>
+        <label><input type="checkbox" name="locations" value="ocean"> Океан</label>
+        <label><input type="checkbox" name="locations" value="hot"> Горячие источники</label>
+        <label><input type="checkbox" name="locations" value="wild"> Дикая природа</label>
+      </div>
+
+      <div class="question">
+        <p>9. Готовы ли вы к поездкам на вертолёте или внедорожниках?</p>
+        <label><input type="radio" name="transport" value="yes" required> Да</label>
+        <label><input type="radio" name="transport" value="no"> Нет</label>
+      </div>
+
+      <h2>Блок 4. Ограничения</h2>
+      <div class="question">
+        <p>10. Есть ли физические ограничения или страх экстрима?</p>
+        <label><input type="radio" name="restrictions" value="yes" required> Да</label>
+        <label><input type="radio" name="restrictions" value="no"> Нет</label>
+      </div>
+
+      <button type="submit" class="btn">Получить результат</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('surveyForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const answers = {};
+      for (let [key, value] of formData.entries()) {
+        if (answers[key]) {
+          if (Array.isArray(answers[key])) {
+            answers[key].push(value);
+          } else {
+            answers[key] = [answers[key], value];
+          }
+        } else {
+          answers[key] = value;
+        }
+      }
+
+      let route = 1;
+      if (answers.firstTime === 'yes' && answers.comfort !== 'low' && answers.restrictions === 'no') {
+        route = 1;
+      } else if (answers.activityType === 'active' || answers.activityType === 'extreme') {
+        if (answers.transport === 'yes' && answers.firstTime === 'no') {
+          route = 3;
+        } else {
+          route = 2;
+        }
+      } else if (answers.comfort === 'very' || answers.group === 'family') {
+        route = 4;
+      } else if (answers.priority === 'photo' || (answers.locations && answers.locations.includes('volcanoes') && answers.locations.includes('ocean'))) {
+        route = 5;
+      }
+
+      localStorage.setItem('selectedRoute', route);
+      window.location.href = 'result.html';
+    });
+  </script>
+</body>
+</html>
