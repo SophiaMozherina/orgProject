@@ -297,27 +297,31 @@
       fill: white;
     }
 
-    #map {
-      flex: 1;
-      height: 78vh;
-      min-width: 320px;
-      max-width: 1100px;
-      border-radius: 14px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
-    }
+    /* === КАРТА И КНОПКИ === */
+#map {
+  flex: 1;
+  height: 78vh;
+  min-height: 500px; /* ← КЛЮЧЕВОЕ ИЗМЕНЕНИЕ */
+  min-width: 320px;
+  max-width: 1100px;
+  border-radius: 14px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
+  background: #f3f3f3;
+}
 
-    @media (max-width: 768px) {
-      .map-wrapper {
-        flex-direction: column;
-        gap: 1.2rem;
-      }
-      .map-nav-btn {
-        align-self: center;
-      }
-      #map {
-        height: 65vh;
-      }
-    }
+@media (max-width: 768px) {
+  .map-wrapper {
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+  .map-nav-btn {
+    align-self: center;
+  }
+  #map {
+    height: 65vh;
+    min-height: 400px; /* ← ОБЯЗАТЕЛЬНО НА МОБИЛКЕ */
+  }
+}
 
     /* === СТИЛИ ДЛЯ СЛАЙДЕРА ФОТО === */
     .popup-content {
