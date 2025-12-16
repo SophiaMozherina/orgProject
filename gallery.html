@@ -1,0 +1,205 @@
+<!-- gallery.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Галерея — Огненная Камчатка</title>
+  <link rel="stylesheet" href="style/style.css" />
+  <style>
+    .gallery-intro {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    /* === ОСНОВНОЙ СЛАЙДЕР === */
+    .main-slider {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      height: 60vh;
+      margin: 0 auto;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.18);
+      background: #f5f5f5;
+    }
+
+    .main-slider img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+
+    .main-slider img.active {
+      opacity: 1;
+    }
+
+    .slider-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.6);
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      transition: background 0.25s;
+    }
+
+    .slider-nav:hover {
+      background: rgba(46, 204, 113, 0.9);
+    }
+
+    .slider-nav.prev { left: 20px; }
+    .slider-nav.next { right: 20px; }
+
+    .slider-counter {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 16px;
+      font-weight: 600;
+      z-index: 10;
+    }
+
+    @media (max-width: 768px) {
+      .main-slider {
+        height: 50vh;
+      }
+      .slider-nav {
+        width: 44px;
+        height: 44px;
+        font-size: 20px;
+      }
+      .slider-nav.prev { left: 10px; }
+      .slider-nav.next { right: 10px; }
+      .slider-counter {
+        bottom: 12px;
+        font-size: 14px;
+        padding: 4px 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav>
+      <ul>
+        <li><a href="index.html">Главная</a></li>
+        <li><a href="obzor.html">Информация</a></li>
+        <li><a href="test.html">Путеводитель</a></li>
+        <li><a href="catalog.html">Маршруты</a></li>
+        <li><a href="gallery.html">Галерея</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="container">
+    <h1>Галерея Камчатки</h1>
+    
+    <div class="gallery-intro">
+      <p>30 лучших фотографий с Камчатки — вулканы, пляжи, гейзеры и дикая природа.</p>
+    </div>
+
+    <!-- === ОСНОВНОЙ СЛАЙДЕР ИЗ 30 ФОТО === -->
+    <div class="main-slider" id="main-slider">
+      <!-- Фото 1 -->
+      <img src="photos/gallery/1.jpg" class="active" alt="Камчатка 1">
+      <!-- Фото 2 -->
+      <img src="photos/gallery/2.jpg" alt="Камчатка 2">
+      <!-- ... продолжи до 30 -->
+      <img src="photos/gallery/3.jpg" alt="Камчатка 3">
+      <img src="photos/gallery/4.jpg" alt="Камчатка 4">
+      <img src="photos/gallery/5.jpg" alt="Камчатка 5">
+      <img src="photos/gallery/6.jpg" alt="Камчатка 6">
+      <img src="photos/gallery/7.jpg" alt="Камчатка 7">
+      <img src="photos/gallery/8.jpg" alt="Камчатка 8">
+      <img src="photos/gallery/9.jpg" alt="Камчатка 9">
+      <img src="photos/gallery/10.jpg" alt="Камчатка 10">
+      <img src="photos/gallery/11.jpg" alt="Камчатка 11">
+      <img src="photos/gallery/12.jpg" alt="Камчатка 12">
+      <img src="photos/gallery/13.jpg" alt="Камчатка 13">
+      <img src="photos/gallery/14.jpg" alt="Камчатка 14">
+      <img src="photos/gallery/15.jpg" alt="Камчатка 15">
+      <img src="photos/gallery/16.jpg" alt="Камчатка 16">
+      <img src="photos/gallery/17.jpg" alt="Камчатка 17">
+      <img src="photos/gallery/18.jpg" alt="Камчатка 18">
+      <img src="photos/gallery/19.jpg" alt="Камчатка 19">
+      <img src="photos/gallery/20.jpg" alt="Камчатка 20">
+      <img src="photos/gallery/21.jpg" alt="Камчатка 21">
+      <img src="photos/gallery/22.jpg" alt="Камчатка 22">
+      <img src="photos/gallery/23.jpg" alt="Камчатка 23">
+      <img src="photos/gallery/24.jpg" alt="Камчатка 24">
+      <img src="photos/gallery/25jpg.jpg" alt="Камчатка 25">
+      <img src="photos/gallery/26.jpg" alt="Камчатка 26">
+      <img src="photos/gallery/27.jpg" alt="Камчатка 27">
+      <img src="photos/gallery/28.jpg" alt="Камчатка 28">
+      <img src="photos/gallery/29.jpg" alt="Камчатка 29">
+      <img src="photos/gallery/30.jpg" alt="Камчатка 30">
+      
+      <button class="slider-nav prev" id="prev-btn">‹</button>
+      <button class="slider-nav next" id="next-btn">›</button>
+      <div class="slider-counter" id="slider-counter">1 / 30</div>
+    </div>
+  </div>
+
+  <script>
+    const slider = document.getElementById('main-slider');
+    const imgs = slider.querySelectorAll('img');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const counter = document.getElementById('slider-counter');
+    let currentIndex = 0;
+    const total = imgs.length;
+
+    function updateSlider() {
+      imgs.forEach((img, i) => {
+        img.classList.toggle('active', i === currentIndex);
+      });
+      counter.textContent = `${currentIndex + 1} / ${total}`;
+    }
+
+    prevBtn.addEventListener('click', () => {
+      currentIndex = (currentIndex - 1 + total) % total;
+      updateSlider();
+    });
+
+    nextBtn.addEventListener('click', () => {
+      currentIndex = (currentIndex + 1) % total;
+      updateSlider();
+    });
+
+    // Автопрокрутка (опционально — закомментируй, если не нужна)
+    /*
+    setInterval(() => {
+      currentIndex = (currentIndex + 1) % total;
+      updateSlider();
+    }, 5000);
+    */
+  </script>
+
+  <footer>
+    <p>© 2025 Можерина С.Д. «Огненная Камчатка» — интерактивный путеводитель</p>
+  </footer>
+
+</body>
+</html>
